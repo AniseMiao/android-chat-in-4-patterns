@@ -133,14 +133,14 @@ public class Frp0TalkActivity extends AppCompatActivity implements OnRecallMessa
                     Utils.scrollListToBottom(this);
                 }, Throwable::printStackTrace);
 
-        // 处理撤回的消息，将对应的消息改为 该消息已被撤回
+        // 处理撤回的消息，将对应的消息改为 消息被撤回
         this.recallMessage$
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(recallMessage -> {
                     UUID messageId = recallMessage.getMessageId();//获取ID
-                    ItemTextReceive view = receiveMap.getOrDefault(messageId, null);//获取对应的接收组件
-                    if (view != null) {//如果组件存在（即如果是接收组件）
-                        view.setText("该消息已被撤回");//将消息改为已被撤回
+                    ItemTextReceive receive = receiveMap.getOrDefault(messageId, null);//获取对应的接收组件
+                    if (receive != null) {//如果组件存在（即如果是接收组件）
+                        receive.setText("消息被撤回");//将消息改为被撤回
                     }
                 });
 
@@ -203,9 +203,9 @@ public class Frp0TalkActivity extends AppCompatActivity implements OnRecallMessa
         Observable.just(message)
                 .observeOn(AndroidSchedulers.mainThread())//在主线程删除对应的发送组件
                 .subscribe(recallRequestMessage -> {
-                    ItemTextSend item = sendMap.getOrDefault(messageId, null);//获取ID对应的组件
-                    if (item != null) {//如果存在对应的发送组件，则将其删除
-                        messageList.removeView(item);
+                    ItemTextSend send = sendMap.getOrDefault(messageId, null);//获取ID对应的组件
+                    if (send != null) {//如果存在对应的发送组件，则修改其内容
+                        send.setText("你撤回了一条消息");//将消息改为 你撤回了一条消息
                     }
                 });
     }
